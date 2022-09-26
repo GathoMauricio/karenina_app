@@ -15,9 +15,4 @@ class CustomerModel {
 
   CustomerModel(this.id_reg, this.id_com, this.dni, this.email, this.name,
       this.last_name, this.address);
-  /*
-  CustomerModel.fromJson(<Map <String, dynamic> json>) {
-    id = json['id'];
-  }
-  */
 }

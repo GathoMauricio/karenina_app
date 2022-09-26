@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class TextInput extends StatelessWidget {
-  final String hintText;
-  final TextInputType inputType;
-  final TextEditingController controller;
-  bool isPassword = false;
-  int maxLines = 1;
-
-  TextInput(this.hintText, this.inputType, this.controller, this.maxLines,
-      this.isPassword,
-      {super.key});
-
+class DropDown extends StatelessWidget {
+  String hintText;
+  List<DropdownMenuItem> listItems;
+  DropDown(this.hintText, this.listItems, {super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(right: 20.0, top: 20.0, left: 20.0),
-      child: TextField(
-        obscureText: isPassword,
-        controller: controller,
-        keyboardType: inputType,
-        maxLines: maxLines,
+      child: DropdownButtonFormField(
         style: const TextStyle(
-            fontSize: 15.0,
-            //fontFamily: "Lato",
-            color: Colors.blueGrey,
-            fontWeight: FontWeight.bold),
+          fontSize: 15.0,
+          //fontFamily: "Lato",
+          color: Colors.blueGrey,
+          fontWeight: FontWeight.bold,
+        ),
         decoration: InputDecoration(
             filled: true,
             fillColor: const Color(0xFFe5e5e5),
@@ -37,6 +27,10 @@ class TextInput extends StatelessWidget {
             focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFe5e5e5)),
                 borderRadius: BorderRadius.all(Radius.circular(9.0)))),
+        items: listItems,
+        onChanged: (value) {
+          print(value);
+        },
       ),
     );
   }

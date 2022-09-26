@@ -1,9 +1,11 @@
+import 'package:customers/requests/customer_request.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:customers/models/customer_model.dart';
 import 'package:customers/helpers/messages.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/material.dart';
 
 class CustomerController {
   Messages messages = Messages();
@@ -29,5 +31,34 @@ class CustomerController {
     }
     //retorna el resultado
     return registros;
+  }
+
+  Future create(CustomerModel customerModel, context) async {
+    if (CustomerRequest().createRequest(customerModel, context)) {
+      final queryParameters = {
+        'api_token': dotenv.env['API_TOKEN'].toString(),
+        'id_reg': customerModel.id_reg.toString(),
+        'id_com': customerModel.id_com.toString(),
+        'dni': customerModel.dni,
+        'email': customerModel.email,
+        'name': customerModel.name,
+        'last_name': customerModel.last_name,
+        'address': customerModel.address,
+      };
+      final url = Uri.http(
+          dotenv.env['API_URL'].toString(),
+          '${dotenv.env['API_PROJECT'].toString()}/api/store_customer',
+          queryParameters);
+      final response =
+          await http.post(url); //.timeout(const Duration(seconds: 90));
+      print(response.body);
+      var json = jsonDecode(response.body);
+      if (json['status'] == 'success') {
+        messages.succesMessage(json['message'], context);
+        Navigator.pop(context);
+      } else {
+        messages.errorMessage(json['message'], context);
+      }
+    }
   }
 }
